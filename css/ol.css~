@@ -1,0 +1,23 @@
+span.add-task {
+  width: 50px;
+  vertical-align: middle;
+  text-align: left;
+  margin-botton: 5px;
+  display: none;
+  cursor: pointer;
+}
+
+span.add-subtask {
+  width: 50px;
+  vertical-align: middle;
+  text-align: left;
+  margin-botton: 5px;
+  display: none;
+  cursor: pointer;
+}
+
+input.task-text {
+  background-color: rgb(243, 245, 246);
+  color: black;
+  border: none;
+}
