@@ -8,17 +8,17 @@
     <dl id="first-list">
       <dt>
         <dl class='list'>
-          <dt class="task action-hover">
-            <input class="tasks" type="checkbox" />
+          <dt class="task action-hover" onmouseenter="HoverDisplay(this);" onmouseleave="HoverHide(this);">
+            <input class="tasks" type="checkbox" onchange="CascadeCheck(this);"/>
             <input class="task-text" type=text placeholder="New task..." />&nbsp;
-            <span class='add-subtask'>&nbsp;sub</span>
-            <span class='add-task'>task&nbsp;</span>
+            <span class='add-subtask' onclick="AddSubTask(this);" onmouseenter="SubTaskHoverIn(this);" onmouseleave="SubTaskHoverOut(this);">&nbsp;sub</span>
+            <span class='add-task' onclick="AddTask(this);" onmouseenter="TaskHoverIn(this);" onmouseleave="TaskHoverOut(this);">task&nbsp;</span>
           </dt>
           <dd class="action-hover"></dd>
         </dl>
       </dt>
     </dl>
     <br>
-    <button type="button" id="cleanup">Cleanup</button>
+    <button type="button" id="cleanup" onclick="Cleanup();">Cleanup</button>
   </body>
 </html> 

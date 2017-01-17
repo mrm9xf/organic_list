@@ -2,79 +2,72 @@
 // # VARIABLES # //
 //////////////////
 
-var subtask_html = `
-<dd class="action-hover">
-<input class="subtasks" type="checkbox" />
-<input class="task-text" type=text value="" />&nbsp;
-<span class="add-task">sub task</span>
-</dd>
-`;
+var next_subtask = `
+<dl class='list'>
+  <dt class="task action-hover" onmouseenter="HoverDisplay(this);" onmouseleave="HoverHide(this);">
+    <input class="tasks" type="checkbox" onchange="CascadeCheck(this);"/>
+    <input class="task-text" type=text placeholder="New task..." />&nbsp;
+    <span class='add-subtask' onclick="AddSubTask(this);" onmouseenter="SubTaskHoverIn(this);" onmouseleave="SubTaskHoverOut(this);">&nbsp;sub</span>
+    <span class='add-task' onclick="AddTask(this);" onmouseenter="TaskHoverIn(this);" onmouseleave="TaskHoverOut(this);">task&nbsp;</span>
+  </dt>
+  <dd class="action-hover"></dd>
+</dl>
+`  
 
-var task_html = `
-<dt class="action-hover">
-<input class="tasks" type="checkbox" />
-<input class="task-text" type=text value="" />&nbsp;
-<span class='add-task'>&nbsp;sub</span>
-<span class='add-subtask'>task&nbsp;</span>
-</dt>
-`;
-
-var next_step = `
+var next_task = `
 <dt>
   <dl class='list'>
-    <dt class="task action-hover">
-        <input class="tasks" type="checkbox" />
-        <input class="task-text" type=text value="Task #1" placeholder="New task..."/>&nbsp;
-        <span class='add-subtask'>&nbsp;sub</span>
-        <span class='add-task'>task&nbsp;</span>
+    <dt class="task action-hover" onmouseenter="HoverDisplay(this);" onmouseleave="HoverHide(this);">
+      <input class="tasks" type="checkbox" onchange="CascadeCheck(this);"/>
+      <input class="task-text" type=text placeholder="New task..." />&nbsp;
+      <span class='add-subtask' onclick="AddSubTask(this);" onmouseenter="SubTaskHoverIn(this);" onmouseleave="SubTaskHoverOut(this);">&nbsp;sub</span>
+      <span class='add-task' onclick="AddTask(this);" onmouseenter="TaskHoverIn(this);" onmouseleave="TaskHoverOut(this);">task&nbsp;</span>
     </dt>
-    <dd class="subtask"></dd>
+    <dd class="action-hover"></dd>
   </dl>
+</dt>
 `  
 
 /////////////////
 // # ACTIONS # //
 /////////////////
 
-//hover over functions
-$('#first-list').on({
-    mouseenter: function() {
-	//$(this).find('.add-task').fadeIn();
-	//$(this).find('.add-subtask').fadeIn();
-    $(this).find('.add-task').css('display', 'inline');
-    $(this).find('.add-subtask').css('display', 'inline');
-  },
-  mouseleave: function(){
-      //$(this).find('.add-task').fadeOut();
-      //$(this).find('.add-subtask').fadeOut();
-    $(this).find('.add-task').css('display', 'none');
-    $(this).find('.add-subtask').css('display', 'none');
-  }
-}, '.action-hover');
+//hover over functions (visibility of 'sub task')
+function HoverDisplay(element){
+    //for mouseenter
+    $(element).find('.add-task').css('display', 'inline');
+    $(element).find('.add-subtask').css('display', 'inline');
+}
 
-//hover over sub
-$('#first-list').on({
-    mouseenter: function() {
-    $(this).css('color', 'red');
-  },
-  mouseleave: function(){
-    $(this).css('color', 'black');
-  }
-}, '.add-task');
+function HoverHide(element){
+    //for mouseleave
+    $(element).find('.add-task').css('display', 'none');
+    $(element).find('.add-subtask').css('display', 'none');
+}
 
-//hover over task
-$('#first-list').on({
-    mouseenter: function() {
-    $(this).css('color', 'red');
-  },
-  mouseleave: function(){
-    $(this).css('color', 'black');
-  }
-}, '.add-subtask');
+//hover over funcitons (color of sub and task
+function TaskHoverIn(element){
+    //for mouseenter
+    $(element).css('color', 'red');
+}
 
-//function for cleaning up tasks marked as done
-$('#cleanup').click(function(){
-    //loop through and delete subtasks
+function TaskHoverOut(element){
+    //for mouseleave
+    $(element).css('color', 'black');
+}
+
+function SubTaskHoverIn(element){
+    //for mouseenter
+    $(element).css('color', 'red');
+}
+
+function SubTaskHoverOut(element){
+    //for mouseleave
+    $(element).css('color', 'black');
+}
+
+function Cleanup(){
+  //loop through and delete subtasks
   var subtasks = $('.subtasks');
   for(var i = 0; i < subtasks.length; i++){
       var checked = subtasks.eq(i).prop('checked');
@@ -98,20 +91,46 @@ $('#cleanup').click(function(){
       }
     }
   }
-  
-  //add a fresh task
-  if( !($('.tasks').length) ){
-      
-  }
-});
+}
 
-//new functions 
-
-$('#first-list').on('click', '.add-subtask', function(){
-  var index = $('.add-subtask').index(this);
-    var subtask = $('.add-subtask').eq(index).parent().next();
-  subtask.html(next_step);
+function AddSubTask(element){
+  debugger;
+  alert('subtask');
+  var index = $('.add-subtask').index(element);
+  var subtask = $('.add-subtask').eq(index).parent().next();
+  subtask.html(next_subtask);
   subtask.find('input[type="text"]').val('');
-});
+}
 
-$('#first-list').on('click', '.add-task', function(){
+function AddTask(element){
+  debugger;
+  alert('task');
+  var index = $('.add-task').index(this);
+  var task = $('.add-task').eq(index).parent().next();
+  $(next_task).insertAfter(task);
+  var new_task = task.next();
+  new_task.find('input[type="text"]').val('');
+}
+
+function CascadeCheck(element){
+  //get the index of the checkbox
+  var index = $('.tasks').index(element);
+
+  //get the value of prop checked
+  var checked = $('.tasks').eq(index).prop('checked');
+
+  //get the <dt> tag associated with '.tasks' class
+  var task = $('.tasks').eq(index).parent();
+
+  //initialize first "subtask"
+  var next_task = task.next();
+
+  if(next_task.children().length && checked){
+    //initialize a t variable to trigger when we are out of subtasks
+    next_task.find('.tasks').attr('checked', true);
+  }
+  else if(next_task.children().length && !checked){
+    //initialize a t variable to trigger when we are out of subtasks
+    next_task.find('.tasks').attr('checked', false);
+  }
+}
