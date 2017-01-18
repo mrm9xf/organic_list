@@ -152,4 +152,14 @@ function KeyboardManipulation(element,event){
   if(event.which == 40 && event.ctrlKey){
     $('.task-text').eq(index+1).focus();
   }
+	
+  //left arrow (click task)
+  if(event.which == 37 && event.ctrlKey){
+    $('.add-task').eq(index).click();
+  }
+  
+  //right arrow (click subtask)
+  if(event.which == 39 && event.ctrlKey){
+    $('.add-subtask').eq(index).click();
+  }
 }
