@@ -6,7 +6,7 @@ var next_subtask = `
 <dl class='list'>
   <dt class="task action-hover" onmouseenter="HoverDisplay(this);" onmouseleave="HoverHide(this);">
     <input class="tasks" type="checkbox" onchange="CascadeCheck(this);"/>
-    <input class="task-text" type=text placeholder="New task..." />&nbsp;
+    <input class="task-text" type=text onkeydown="KeyboardManipulation(this, event);" placeholder="New task..." />&nbsp;
     <span class='add-subtask' onclick="AddSubTask(this);" onmouseenter="SubTaskHoverIn(this);" onmouseleave="SubTaskHoverOut(this);">&nbsp;sub</span>
     <span class='add-task' onclick="AddTask(this);" onmouseenter="TaskHoverIn(this);" onmouseleave="TaskHoverOut(this);">task&nbsp;</span>
   </dt>
@@ -19,7 +19,7 @@ var next_task = `
   <dl class='list'>
     <dt class="task action-hover" onmouseenter="HoverDisplay(this);" onmouseleave="HoverHide(this);">
       <input class="tasks" type="checkbox" onchange="CascadeCheck(this);"/>
-      <input class="task-text" type=text placeholder="New task..." />&nbsp;
+      <input class="task-text" type=text onkeydown="KeyboardManipulation(this, event);" placeholder="New task..." />&nbsp;
       <span class='add-subtask' onclick="AddSubTask(this);" onmouseenter="SubTaskHoverIn(this);" onmouseleave="SubTaskHoverOut(this);">&nbsp;sub</span>
       <span class='add-task' onclick="AddTask(this);" onmouseenter="TaskHoverIn(this);" onmouseleave="TaskHoverOut(this);">task&nbsp;</span>
     </dt>
