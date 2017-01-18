@@ -144,12 +144,12 @@ function KeyboardManipulation(element,event){
   var index = $('.task-text').index(element);
   
   //up arrow
-  if(event.which == 38){
+  if(event.which == 38 && event.ctrlKey){
     $('.task-text').eq(index-1).focus();
   }
   
   //down arrow
-  if(event.which == 40){
+  if(event.which == 40 && event.ctrlKey){
     $('.task-text').eq(index+1).focus();
   }
 }
