@@ -94,12 +94,17 @@ function Cleanup(){
 }
 
 function AddSubTask(element){
-  debugger;
-  alert('subtask');
   var index = $('.add-subtask').index(element);
   var subtask = $('.add-subtask').eq(index).parent().next();
-  subtask.html(next_subtask);
-  subtask.find('input[type="text"]').val('');
+  var l = subtask.find('.list').length;
+  if(l == 0){
+    subtask.html(next_subtask);
+    subtask.find('input[type="text"]').val('');
+  }
+  else{
+    $(next_subtask).insertAfter(subtask.find('.list:last'));
+    subtask.find('.list:last').val('');
+  }
 }
 
 function AddTask(element){
