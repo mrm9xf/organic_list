@@ -108,8 +108,6 @@ function AddSubTask(element){
 }
 
 function AddTask(element){
-  debugger;
-  alert('task');
   var index = $('.add-task').index(element);
   var task = $('.add-task').eq(index).parent().next();
   $(next_task).insertAfter(task);
