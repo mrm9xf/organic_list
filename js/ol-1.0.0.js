@@ -134,3 +134,19 @@ function CascadeCheck(element){
     next_task.find('.tasks').attr('checked', false);
   }
 }
+
+//new function for using keydown to perform actions
+function KeyboardManipulation(element,event){
+  //define length and index
+  var index = $('.task-text').index(element);
+  
+  //up arrow
+  if(event.which == 38){
+    $('.task-text').eq(index-1).focus();
+  }
+  
+  //down arrow
+  if(event.which == 40){
+    $('.task-text').eq(index+1).focus();
+  }
+}
