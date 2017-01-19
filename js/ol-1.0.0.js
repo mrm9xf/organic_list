@@ -162,4 +162,46 @@ function KeyboardManipulation(element,event){
   if(event.which == 39 && event.ctrlKey){
     $('.add-subtask').eq(index).click();
   }
+	
+  //CTRL + d = delete task
+  ctrl_d: if(event.which == 68 && event.ctrlKey){
+    event.preventDefault();
+    //pull the length of the entire list, break if only master task exists
+    if($('.task-text').length == 1){break ctrl_d};
+      
+    //pull the index of the last text box
+    var last = $('.task-text').index($('.task-text:last'));
+      
+    //get the task list so we can see how many children 
+    //default is 2, a text box and empty next level
+    var task_list = $('.task-text').eq(index).parent().parent().children();
+      
+    //grab task, in the event task_list has more than 1 item
+    var task = $('.task-text').eq(index).parent();
+      
+    //if a singlular task exists, get rid of the whole <dl>
+    if(task_list.length == 2){
+      task_list.remove();
+      $('.task-text').eq(index).focus();
+    }
+    //if more than 1 task exists, get rid of the <dt> in question, 
+    //and its <dd> for a subtask that follows
+    else{
+      task.next().remove();
+      task.remove();
+    }
+      
+    l = $('.task-list').length;
+      
+    //reset focus
+    if(index == last){
+      $('.task-text').eq(index-1).focus();
+    }
+    else if(index > l){
+      $('.task-text:last').focus();
+    }
+    else{
+      $('.task-text').eq(index).focus();  
+    }
+  }
 }
