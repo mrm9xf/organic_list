@@ -66,30 +66,33 @@ function SubTaskHoverOut(element){
     $(element).css('color', 'black');
 }
 
-function Cleanup(){
-  //loop through and delete subtasks
-  var subtasks = $('.subtasks');
-  for(var i = 0; i < subtasks.length; i++){
-      var checked = subtasks.eq(i).prop('checked');
-    if(checked){
-	subtasks.eq(i).parent().remove();
-    }
-  }
-  
+function Cleanup(index){
   //loop through and delete tasks
   var tasks = $('.tasks');
   for(var i = 0; i < tasks.length; i++){
       var checked = tasks.eq(i).prop('checked');
     if(checked){
-	var l = $('.tasks').length;
+      var l = $('.tasks').length;
       if(l > 1){
-	  tasks.eq(i).parent().remove();
-	  }
+	tasks.eq(i).parent().remove();
+      }
       else{
-	  tasks.eq(i).parent().children('input[type="text"]').val('');
+	tasks.eq(i).parent().children('input[type="text"]').val('');
         tasks.eq(i).parent().children('input[type="checkbox"]').prop('checked', false);
       }
     }
+  }
+  
+  //check length
+  var l = $('.task-text').length;
+  if(index > l){
+    $('.task-text:last').focus();
+  }
+  else if (l-1){
+    $('.task-text').eq(index).focus();
+  }
+  else{
+    $('#first-list').children('dt').eq(0).html(next_subtask);
   }
 }
 
@@ -123,18 +126,18 @@ function CascadeCheck(element){
   var checked = $('.tasks').eq(index).prop('checked');
 
   //get the <dt> tag associated with '.tasks' class
-  var task = $('.tasks').eq(index).parent();
+  var task = $('.tasks').eq(index).parent().next('dd.action-hover');
 
   //initialize first "subtask"
-  var next_task = task.next();
+  //var next_task = task.next();
 
-  if(next_task.children().length && checked){
+  if(task.children().length && checked){
     //initialize a t variable to trigger when we are out of subtasks
-    next_task.find('.tasks').attr('checked', true);
+    task.find('.tasks').prop('checked', true);
   }
-  else if(next_task.children().length && !checked){
+  else if(task.children().length && !checked){
     //initialize a t variable to trigger when we are out of subtasks
-    next_task.find('.tasks').attr('checked', false);
+    task.find('.tasks').prop('checked', false);
   }
 }
 
@@ -143,65 +146,45 @@ function KeyboardManipulation(element,event){
   //define length and index
   var index = $('.task-text').index(element);
   
-  //up arrow
+  //CTRL + up arrow
   if(event.which == 38 && event.ctrlKey){
     $('.task-text').eq(index-1).focus();
   }
   
-  //down arrow
+  //CTRL + down arrow
   if(event.which == 40 && event.ctrlKey){
     $('.task-text').eq(index+1).focus();
   }
 	
-  //left arrow (click task)
+  //CTRL + left arrow (click task)
   if(event.which == 37 && event.ctrlKey){
     $('.add-task').eq(index).click();
   }
   
-  //right arrow (click subtask)
+  //CTRL + right arrow (click subtask)
   if(event.which == 39 && event.ctrlKey){
     $('.add-subtask').eq(index).click();
   }
-	
-  //CTRL + d = delete task
+  
+  //marking off an item on the list
+  if(event.which == 67 && event.ctrlKey){
+    //grab task
+    var checkbox = $('.task-text').eq(index).prev();
+    if(checkbox.prop('checked')){
+    	checkbox.prop('checked', false);
+    }
+    else{
+    	checkbox.prop('checked', true);
+    }
+    checkbox.change();
+  }
+  
+  //cleanup
   ctrl_d: if(event.which == 68 && event.ctrlKey){
     event.preventDefault();
     //pull the length of the entire list, break if only master task exists
     if($('.task-text').length == 1){break ctrl_d};
-      
-    //pull the index of the last text box
-    var last = $('.task-text').index($('.task-text:last'));
-      
-    //get the task list so we can see how many children 
-    //default is 2, a text box and empty next level
-    var task_list = $('.task-text').eq(index).parent().parent().children();
-      
-    //grab task, in the event task_list has more than 1 item
-    var task = $('.task-text').eq(index).parent();
-      
-    //if a singlular task exists, get rid of the whole <dl>
-    if(task_list.length == 2){
-      task_list.remove();
-      $('.task-text').eq(index).focus();
-    }
-    //if more than 1 task exists, get rid of the <dt> in question, 
-    //and its <dd> for a subtask that follows
-    else{
-      task.next().remove();
-      task.remove();
-    }
-      
-    l = $('.task-list').length;
-      
-    //reset focus
-    if(index == last){
-      $('.task-text').eq(index-1).focus();
-    }
-    else if(index > l){
-      $('.task-text:last').focus();
-    }
-    else{
-      $('.task-text').eq(index).focus();  
-    }
+    //run cleanup
+    Cleanup(index);
   }
 }
