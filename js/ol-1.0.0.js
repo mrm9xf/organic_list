@@ -93,6 +93,7 @@ function Cleanup(index){
   }
   else{
     $('#first-list').children('dt').eq(0).html(next_subtask);
+    $('.task-text').eq(0).focus();
   }
 }
 
